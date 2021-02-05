@@ -18,7 +18,10 @@ class App extends React.Component {
     return (
       <div>
         <ul>
-          {this.state.photos.map(photo => <li key={photo.id}>{photo.user.name}</li>)}
+          {this.state.photos.map(photo => <li key={photo.id}>
+            <p>{photo.user.name}</p>
+            <p>{photo.alt_description}</p>
+            <img src={photo.urls.small} alt='' /></li>)}
         </ul>
       </div>
     );
