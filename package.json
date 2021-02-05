@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    
+    "start": "npm-run-all -p -l start:*",
+    "start:server": "cd server && node server.js",
+    "start:client": "cd client && yarn start"
   },
   "repository": {
     "type": "git",
@@ -18,6 +20,7 @@
   },
   "homepage": "https://github.com/AnnaLangner/PhotoSearchEngine#readme",
   "dependencies": {
+    "npm-run-all": "^4.1.5",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "yarn": "^1.17.3"
