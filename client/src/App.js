@@ -1,25 +1,29 @@
-import logo from './logo.svg';
 import './App.css';
+import React from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+class App extends React.Component {
+  state = {
+    photos: [],
+  }
+
+  componentDidMount() {
+    fetch('http://localhost:8000/api/photos')
+      .then(res => res.json())
+      .then(res => {
+        this.setState({ photos: res });
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <ul>
+          {this.state.photos.map(photo => <li key={photo.id}>{photo.user.name}</li>)}
+        </ul>
+      </div>
+    );
+  }
+};
 
 export default App;
+
