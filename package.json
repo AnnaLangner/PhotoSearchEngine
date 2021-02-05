@@ -1,0 +1,29 @@
+{
+  "name": "PhotoSearchEngine",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnnaLangner/PhotoSearchEngine.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AnnaLangner/PhotoSearchEngine/issues"
+  },
+  "homepage": "https://github.com/AnnaLangner/PhotoSearchEngine#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "http-server": "^0.12.3"
+  },
+  "dependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  }
+}
