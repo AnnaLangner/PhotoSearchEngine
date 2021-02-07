@@ -3,16 +3,18 @@ import { getPhoto } from './Photo';
 
 
 export class Search extends React.Component {
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state={
-      searchingText:'london',
+      searchingText: '',
       photos: []
     }
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillMount() {
-    getPhoto(this.state.searchingText).then((response) => {
+    getPhoto(this.props.location.search).then((response) => {
       this.setState({
         photos: response,
       });
@@ -24,21 +26,21 @@ export class Search extends React.Component {
     this.setState({
       searchingText: searchingText
     });
-
-    if (searchingText.length > 3) {
-			this.props.onSearch(searchingText);
-		}
   }
 
-  handleKeyUp(e) {
-		if (e.keyCode === 13) {
-			this.props.onSearch(this.state.searchingText);
-		}
-	}    
+  handleSubmit(e) {
+    console.log(this.state.searchingText)
+    this.props.history.push({
+      pathname: '/search',
+      search: this.state.searchingText
+    })
+    e.preventDefault();
+    window.location.reload();
+  }
+    
 
   render(){
     const { photos } = this.state;
-    console.log(photos)
 
     let photoList = photos.map((photo) => {
       return (
@@ -52,13 +54,18 @@ export class Search extends React.Component {
 
     return(
       <div>
-        <input
-          type='text'
-          onChange={this.handleChange}
-          onKeyUp={this.handleKeyUp}
-          placeholder='Enter your search term here'
-          value={this.state.searchText}
-        />
+        <form onSubmit={this.handleSubmit}>
+          <label>
+          Photo search engine:
+          <input
+            type='text'
+            onChange={this.handleChange}
+            placeholder='Enter your search term here'
+            value={this.state.searchingText}
+          />
+          </label>
+          <input type='submit' value='Send'/>
+        </form>
         <div>
           <ul>
           { photoList }
