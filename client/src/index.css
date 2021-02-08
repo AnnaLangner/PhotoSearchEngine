@@ -37,12 +37,25 @@ body, html {
   width: 80%;
 }
 
+.form-group-search {
+  padding-top: 5vh;
+}
+
 .form-label {
   color: #f8f9fa;
-  font-size: 3rem;
+  font-size: 2.5rem;
 }
 
 .btn-submit-home {
   background-color: transparent !important;
-  border-color: #f8f9fa;
+  border-color: #f8f9fa !important;
+}
+
+.gallery-box{
+  position: relative;
+}
+
+.gallery-div {
+  position: absolute;
+  left: 15%;
 }
