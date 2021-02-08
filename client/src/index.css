@@ -11,3 +11,38 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+body, html {
+  height: 100%;
+}
+
+.container {
+  max-width: unset !important;
+}
+
+.bg {
+  background-image: url('https://images.unsplash.com/photo-1561144534-f04d7c85b8a9?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1650&q=80');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  min-height: 100vh;
+}
+
+.form-group {
+  padding-top: 40vh;
+  padding-left: 15vh;
+  margin-right: auto;
+  margin-left: auto;
+  width: 80%;
+}
+
+.form-label {
+  color: #f8f9fa;
+  font-size: 3rem;
+}
+
+.btn-submit-home {
+  background-color: transparent !important;
+  border-color: #f8f9fa;
+}

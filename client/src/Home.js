@@ -1,4 +1,5 @@
 import React from 'react';
+import { Form, Col, Button, Container } from 'react-bootstrap'
 
 
 export class Home extends React.Component {
@@ -19,7 +20,6 @@ export class Home extends React.Component {
   }
 
   handleSubmit() {
-    //przejście na strone search
     return this.props.history.push({
       pathname: '/search',
       search: this.state.searchingText
@@ -28,18 +28,26 @@ export class Home extends React.Component {
 
   render() {
     return(
-      <form onSubmit={this.handleSubmit}>
-        <label>
-        Photo search engine:
-        <input
-          type='text'
-          onChange={this.handleChange}
-          placeholder='Enter your search term here'
-          value={this.state.searchingText}
-        />
-        </label>
-        <input type='submit' value='Send'/>
-      </form>
+      <Container className="bg">
+        <Form onSubmit={this.handleSubmit}>
+          <Form.Group className='form-group'>
+            <Form.Label>Photo search engine: </Form.Label>
+              <Form.Row className="align-items-center">        
+                <Col sm={9}>
+                <Form.Control
+                    type='text'
+                    onChange={this.handleChange}
+                    placeholder='Enter your search term here'
+                    value={this.state.searchingText}
+                  /> 
+                </Col>  
+                <Col sm={3}>
+                    <Button type="submit" className='btn-submit-home'>Submit</Button>
+                  </Col>          
+              </Form.Row>
+          </Form.Group>
+        </Form> 
+      </Container>
     )
-  }
-}
+  };
+};
