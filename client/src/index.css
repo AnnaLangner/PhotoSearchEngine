@@ -59,3 +59,9 @@ body, html {
   position: absolute;
   left: 15%;
 }
+
+.pagination {
+  display: inline-flex !important;
+  padding-top: 40px;
+  justify-content: center;
+}

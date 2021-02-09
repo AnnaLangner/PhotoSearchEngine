@@ -2,24 +2,42 @@ import React from 'react';
 import { getPhoto } from './Photo';
 import { Form, Col, Button, Container } from 'react-bootstrap';
 import Gallery from 'react-grid-gallery';
+import Pagination from "react-js-pagination";
 
 
 export class Search extends React.Component {
   constructor(props){
     super(props);
+    console.log("constructor")
     this.state={
       searchingText: '',
       photos: [],
-      page: 1
+      page: 1,
+      numberOfPhotos: 0
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handlePageChange = this.handlePageChange.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    console.log('mount')
     getPhoto(this.props.location.search, 1).then((response) => {
       this.setState({
-        photos: response,
+        photos: response.results,
+        numberOfPhotos: response.total,
+        
+      });
+    }).catch(err=>console.log(err.message));
+  }
+
+  handlePageChange(pageNumber) {
+    console.log(`active page is ${pageNumber}`);
+    getPhoto(this.props.location.search, pageNumber).then((response) => {
+      console.log('test')
+      this.setState({
+        photos: response.results,
+        page: pageNumber
       });
     }).catch(err=>console.log(err.message));
   }
@@ -44,6 +62,8 @@ export class Search extends React.Component {
 
   render(){
     const { photos } = this.state;
+    console.log('render call')
+    console.log(photos)
 
     let photoList = photos.map((photo) => {
       const thumbnailScale = photo.width / 200;
@@ -67,7 +87,7 @@ export class Search extends React.Component {
               <Form.Control
                   type='text'
                   onChange={this.handleChange}
-                  placeholder='You changed your mind? Enter the new term here'
+                  placeholder='Changed your mind? Enter the new term here'
                   value={this.state.searchingText}
                 /> 
               </Col>  
@@ -79,6 +99,15 @@ export class Search extends React.Component {
         </Form>
         <div>
           <Gallery images= { photoList } enableImageSelection={false} />
+        </div>
+        <div>
+          <Pagination
+            activePage={this.state.page}
+            itemsCountPerPage={30}
+            totalItemsCount={this.state.numberOfPhotos}
+            pageRangeDisplayed={5}
+            onChange={this.handlePageChange }
+          />
         </div>
       </Container>
     );
