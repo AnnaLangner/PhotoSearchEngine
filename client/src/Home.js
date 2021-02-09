@@ -30,7 +30,7 @@ export class Home extends React.Component {
     return(
       <Container className="bg">
         <Form onSubmit={this.handleSubmit}>
-          <Form.Group className='form-group'>
+          <Form.Group className='home'>
             <Form.Label>Photo search engine: </Form.Label>
               <Form.Row className="align-items-center">        
                 <Col sm={9}>

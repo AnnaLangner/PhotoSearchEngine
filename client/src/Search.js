@@ -20,7 +20,7 @@ export class Search extends React.Component {
     this.handlePageChange = this.handlePageChange.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     console.log('mount')
     getPhoto(this.props.location.search, 1).then((response) => {
       this.setState({
@@ -79,9 +79,9 @@ export class Search extends React.Component {
     });
 
     return(
-      <Container>
+      <Container className="search-container">
         <Form onSubmit={this.handleSubmit}>
-          <Form.Group className='form-group-search'>
+          <Form.Group className='search'>
             <Form.Row className="align-items-center">        
               <Col sm={9}>
               <Form.Control
@@ -97,10 +97,10 @@ export class Search extends React.Component {
             </Form.Row>
           </Form.Group>            
         </Form>
-        <div>
+        <div className="gallery-box">
           <Gallery images= { photoList } enableImageSelection={false} />
         </div>
-        <div>
+        <div className="pagination-div">
           <Pagination
             activePage={this.state.page}
             itemsCountPerPage={30}

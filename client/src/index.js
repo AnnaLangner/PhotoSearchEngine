@@ -5,9 +5,7 @@ import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Root = () => (
-
-    <App />
-
+  <App />
 );
 
 ReactDOM.render(<Root/>, document.getElementById('root'));
