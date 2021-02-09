@@ -1,9 +1,7 @@
 import React from 'react';
 import { getPhoto } from './Photo';
 import { Form, Col, Button, Container } from 'react-bootstrap';
-import { Gallery, Item } from 'react-photoswipe-gallery';
-import 'photoswipe/dist/photoswipe.css'
-import 'photoswipe/dist/default-skin/default-skin.css'
+import Gallery from 'react-grid-gallery';
 
 
 export class Search extends React.Component {
@@ -11,14 +9,15 @@ export class Search extends React.Component {
     super(props);
     this.state={
       searchingText: '',
-      photos: []
+      photos: [],
+      page: 1
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentWillMount() {
-    getPhoto(this.props.location.search).then((response) => {
+    getPhoto(this.props.location.search, 1).then((response) => {
       this.setState({
         photos: response,
       });
@@ -47,20 +46,16 @@ export class Search extends React.Component {
     const { photos } = this.state;
 
     let photoList = photos.map((photo) => {
-      return (
-        <Item 
-          key={photo.id}
-          original={photo.urls.full}
-          thumbnail={photo.urls.thumb}
-          width="1024"
-          height="768"
-          title={`Author: ${photo.user.name}, Description: ${photo.alt_description}`}          
-        >
-          {({ ref, open }) => (
-            <img style={{ cursor: 'pointer', objectFit: 'cover', width: '100%', maxHeight: '100%',}} ref={ref} onClick={open} src={photo.urls.thumb}/>
-          )}                      
-        </Item>
-      );        
+      const thumbnailScale = photo.width / 200;
+
+      return {
+        src: photo.urls.full,
+        thumbnail: photo.urls.thumb,
+        thumbnailWidth: 200,
+        thumbnailHeight: photo.height / thumbnailScale,
+        isSelected: false,
+        caption: "Author: " + photo.user.name + ", Description: " + photo.alt_description
+      }      
     });
 
     return(
@@ -83,21 +78,7 @@ export class Search extends React.Component {
           </Form.Group>            
         </Form>
         <div>
-          <h1>{this.state.searchingText}</h1>
-        </div>
-        <div>
-          <Gallery>
-            <div className='gallery-div'
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '240px 171px 171px',
-                gridTemplateRows: '114px 114px',
-                gridGap: 12,
-              }}
-            >
-              { photoList }
-            </div>
-          </Gallery>
+          <Gallery images= { photoList } enableImageSelection={false} />
         </div>
       </Container>
     );
