@@ -107,6 +107,8 @@ export class Search extends React.Component {
             totalItemsCount={this.state.numberOfPhotos}
             pageRangeDisplayed={5}
             onChange={this.handlePageChange }
+            innerClass={'pagination-controls'}
+            itemClass={'pagination-controls-button'}
           />
         </div>
       </Container>
