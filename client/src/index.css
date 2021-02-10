@@ -16,11 +16,6 @@ body, html {
   height: 100%;
 }
 
-#root {
-  background-image: linear-gradient(to bottom, #f7f1b4, #7ebdc2);
-  display: flex;
-} 
-
 .bg {
   background-image: url('https://images.unsplash.com/photo-1561144534-f04d7c85b8a9?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1650&q=80');
   background-position: center;
@@ -56,8 +51,10 @@ body, html {
 }
 
 .btn-submit-search {
-  background-color: #acd1bd !important;
-  border-color:  #acd1bd !important;
+  color: black !important;
+  background-color: #dee0df !important;
+  border-color:  #dee0df !important;
+  font-weight: 600 !important;
 }
 
 .gallery-box{
@@ -76,7 +73,7 @@ iframe {
 }
 
 .pagination-controls-button {
-  background-color: white;
+  background-color: #dee0df;
   border-radius: 0.15em;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   cursor: default;

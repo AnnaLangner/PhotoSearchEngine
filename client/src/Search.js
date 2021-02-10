@@ -1,5 +1,6 @@
 import React from 'react';
 import { getPhoto } from './Photo';
+import { getAutocomplete } from './Autocomplete';
 import { Form, Col, Button, Container } from 'react-bootstrap';
 import Gallery from 'react-grid-gallery';
 import Pagination from "react-js-pagination";
@@ -8,9 +9,9 @@ import Pagination from "react-js-pagination";
 export class Search extends React.Component {
   constructor(props){
     super(props);
-    console.log("constructor")
     this.state={
       searchingText: '',
+      autocompleteArray: [],
       photos: [],
       page: 1,
       numberOfPhotos: 0
@@ -18,10 +19,10 @@ export class Search extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
+    this.onClick= this.onClick.bind(this);
   }
 
   componentWillMount() {
-    console.log('mount')
     getPhoto(this.props.location.search, 1).then((response) => {
       this.setState({
         photos: response.results,
@@ -32,9 +33,7 @@ export class Search extends React.Component {
   }
 
   handlePageChange(pageNumber) {
-    console.log(`active page is ${pageNumber}`);
     getPhoto(this.props.location.search, pageNumber).then((response) => {
-      console.log('test')
       this.setState({
         photos: response.results,
         page: pageNumber
@@ -43,14 +42,19 @@ export class Search extends React.Component {
   }
 
   handleChange(e) {
-    const searchingText = e.target.value;
+    const searchingText = e.target.value;    
+    getAutocomplete(searchingText).then((response) => {
+      console.log(searchingText)      
+      this.setState({
+        autocompleteArray: response.autocomplete
+      });      
+    }).catch(err=>console.log(err.message));
     this.setState({
       searchingText: searchingText
-    });
+    })
   }
 
   handleSubmit(e) {
-    console.log(this.state.searchingText)
     this.props.history.push({
       pathname: '/search',
       search: this.state.searchingText
@@ -58,12 +62,51 @@ export class Search extends React.Component {
     e.preventDefault();
     window.location.reload();
   }
+
+  onClick(e) {
+    this.props.history.push({
+      pathname: '/search',
+      search: e.target.innerText
+    })
+    window.location.reload();
+  }
+
+  // myTileViewportStyle() {
+  //   return {
+  //     width: 200,
+  //     pading: 5,
+  //     overflow: 'hidden',
+  //     display: 'flex',
+  //     flexWrap: 'wrap',
+  //     margin: 0 -8 -8 
+  //   }
+  // }
+
+  // myThumbnailStyle() {
+  //   return {
+  //     borderRadius: 4,
+  //     width: 200,
+  //     objectFit: 'cover'
+  //   };  
+  // }
     
 
   render(){
+    const { autocompleteArray } = this.state;
+
+    let autocompleteList = (
+      <ul className='suggestions'>
+     {autocompleteArray.map((objectItem) => {
+
+      return (
+        
+          <li onClick={this.onClick}>{objectItem.query}</li>
+        
+      )
+
+    })} </ul>);
+
     const { photos } = this.state;
-    console.log('render call')
-    console.log(photos)
 
     let photoList = photos.map((photo) => {
       const thumbnailScale = photo.width / 200;
@@ -95,10 +138,11 @@ export class Search extends React.Component {
                   <Button type="submit" className='btn-submit-search'>Submit</Button>
                 </Col>          
             </Form.Row>
+            <Form.Row className="autocomplete">{autocompleteList}</Form.Row>
           </Form.Group>            
         </Form>
         <div className="gallery-box">
-          <Gallery images= { photoList } enableImageSelection={false} />
+          <Gallery images= { photoList } enableImageSelection={false} tileViewportStyle={this.myTileViewportStyle} thumbnailStyle={this.myThumbnailStyle} />
         </div>
         <div className="pagination-div">
           <Pagination
