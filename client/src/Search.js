@@ -14,7 +14,8 @@ export class Search extends React.Component {
       autocompleteArray: [],
       photos: [],
       page: 1,
-      numberOfPhotos: 0
+      numberOfPhotos: 0,
+      showTooltip: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,8 +27,7 @@ export class Search extends React.Component {
     getPhoto(this.props.location.search, 1).then((response) => {
       this.setState({
         photos: response.results,
-        numberOfPhotos: response.total,
-        
+        numberOfPhotos: response.total
       });
     }).catch(err=>console.log(err.message));
   }
@@ -44,15 +44,16 @@ export class Search extends React.Component {
   handleChange(e) {
     const searchingText = e.target.value;    
     if (searchingText != '') {
-      getAutocomplete(searchingText).then((response) => {
-        console.log(searchingText)      
+      getAutocomplete(searchingText).then((response) => {    
         this.setState({
-          autocompleteArray: response.autocomplete
+          autocompleteArray: response.autocomplete,
+          showTooltip: true
         });      
       }).catch(err=>console.log(err.message));      
     }
     this.setState({
-      searchingText: searchingText
+      searchingText: searchingText,
+      showTooltip: false
     });    
   }
 
@@ -71,27 +72,7 @@ export class Search extends React.Component {
       search: e.target.innerText
     })
     window.location.reload();
-  }
-
-  // myTileViewportStyle() {
-  //   return {
-  //     width: 200,
-  //     pading: 5,
-  //     overflow: 'hidden',
-  //     display: 'flex',
-  //     flexWrap: 'wrap',
-  //     margin: 0 -8 -8 
-  //   }
-  // }
-
-  // myThumbnailStyle() {
-  //   return {
-  //     borderRadius: 4,
-  //     width: 200,
-  //     objectFit: 'cover'
-  //   };  
-  // }
-    
+  }    
 
   render(){
     const { autocompleteArray } = this.state;
@@ -138,11 +119,11 @@ export class Search extends React.Component {
                   <Button type="submit" className='btn-submit-search'>Submit</Button>
                 </Col>          
             </Form.Row>
-            <Form.Row className="autocomplete">{autocompleteList}</Form.Row>
+            {this.state.showTooltip && (<Form.Row className="autocomplete">{autocompleteList}</Form.Row>)}
           </Form.Group>            
         </Form>
         <div className="gallery-box">
-          <Gallery images= { photoList } enableImageSelection={false} tileViewportStyle={this.myTileViewportStyle} thumbnailStyle={this.myThumbnailStyle} />
+          <Gallery images= { photoList } enableImageSelection={false}/>
         </div>
         <div className="pagination-div">
           <Pagination

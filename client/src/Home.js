@@ -1,19 +1,38 @@
 import React from 'react';
-import { Form, Col, Button, Container } from 'react-bootstrap'
+import { Form, Col, Button, Container } from 'react-bootstrap';
+import { getAutocomplete } from './Autocomplete';
 
 
 export class Home extends React.Component {
   constructor(props){
     super(props);
     this.state={
-      searchingText:''
+      searchingText:'',
+      autocompleteArray: [],
+      showTooltip: false
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onClick= this.onClick.bind(this);
   }
 
   handleChange(e) {
-    const searchingText = e.target.value;
+    const searchingText = e.target.value;  
+    if (searchingText != '') {
+      getAutocomplete(searchingText).then((response) => {     
+        this.setState({
+          autocompleteArray: response.autocomplete,
+          showTooltip: true
+        });      
+      }).catch(err=>console.log(err.message));      
+    } else {
+
+      this.setState({
+        autocompleteArray: [],
+        showTooltip: false
+      }); 
+    }
+
     this.setState({
       searchingText: searchingText
     });    
@@ -26,7 +45,27 @@ export class Home extends React.Component {
     })
   }
 
+  onClick(e) {
+    this.props.history.push({
+      pathname: '/search',
+      search: e.target.innerText
+    })
+    window.location.reload();
+  }
+
   render() {
+    const { autocompleteArray } = this.state;
+
+    let autocompleteList = (
+        <ul className='suggestions'>
+          {autocompleteArray.map((objectItem) => {
+            return (        
+              <li className='suggestions-li' onClick={this.onClick} key={objectItem.query}>{objectItem.query}</li>        
+            )
+          })} 
+        </ul>     
+    );
+
     return(
       <Container className="bg">
         <Form onSubmit={this.handleSubmit}>
@@ -45,6 +84,7 @@ export class Home extends React.Component {
                     <Button type="submit" className='btn-submit-home'>Submit</Button>
                   </Col>          
               </Form.Row>
+              {this.state.showTooltip && (<Form.Row className="autocomplete">{autocompleteList}</Form.Row>)}
           </Form.Group>
         </Form> 
       </Container>
