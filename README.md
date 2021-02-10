@@ -33,7 +33,7 @@ This is an application that uses the unsplash API. Thanks to the API, you can se
 
 *Requires :* 
 
-* yarn
+* yarn (tested on version 1.17.3)
 
 To instal dependencies run in client directory:
 
