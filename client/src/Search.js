@@ -109,6 +109,7 @@ export class Search extends React.Component {
             onChange={this.handlePageChange }
             innerClass={'pagination-controls'}
             itemClass={'pagination-controls-button'}
+            linkClass={'pagination-links'}
           />
         </div>
       </Container>

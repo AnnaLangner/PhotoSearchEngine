@@ -17,7 +17,7 @@ body, html {
 }
 
 #root {
-  background-image: linear-gradient(to bottom, #f3dfa2, #7ebdc2);
+  background-image: linear-gradient(to bottom, #f7f1b4, #7ebdc2);
   display: flex;
 } 
 
@@ -55,6 +55,11 @@ body, html {
   border-color: #f8f9fa !important;
 }
 
+.btn-submit-search {
+  background-color: #acd1bd !important;
+  border-color:  #acd1bd !important;
+}
+
 .gallery-box{
   display: inline-flex;
 }
@@ -82,4 +87,10 @@ iframe {
 .pagination-controls-button:hover:not(:active) {
   transition: transform 0.15s;
   transform: translateY(-1px);
+}
+
+.pagination-links {
+  color: black;
+  font-size: large;
+  font-weight: 600;
 }
