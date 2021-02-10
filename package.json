@@ -4,9 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm-run-all -p -l start:*",
-    "start:server": "cd server && node server.js",
-    "start:client": "cd client && yarn start"
+    "start": "cd client && yarn start"
   },
   "repository": {
     "type": "git",
