@@ -43,15 +43,17 @@ export class Search extends React.Component {
 
   handleChange(e) {
     const searchingText = e.target.value;    
-    getAutocomplete(searchingText).then((response) => {
-      console.log(searchingText)      
-      this.setState({
-        autocompleteArray: response.autocomplete
-      });      
-    }).catch(err=>console.log(err.message));
+    if (searchingText != '') {
+      getAutocomplete(searchingText).then((response) => {
+        console.log(searchingText)      
+        this.setState({
+          autocompleteArray: response.autocomplete
+        });      
+      }).catch(err=>console.log(err.message));      
+    }
     this.setState({
       searchingText: searchingText
-    })
+    });    
   }
 
   handleSubmit(e) {
@@ -96,15 +98,13 @@ export class Search extends React.Component {
 
     let autocompleteList = (
       <ul className='suggestions'>
-     {autocompleteArray.map((objectItem) => {
-
-      return (
-        
-          <li onClick={this.onClick}>{objectItem.query}</li>
-        
-      )
-
-    })} </ul>);
+        {autocompleteArray.map((objectItem) => {
+          return (        
+            <li className='suggestions-li' onClick={this.onClick} key={objectItem.query}>{objectItem.query}</li>        
+          )
+        })} 
+      </ul>
+    );
 
     const { photos } = this.state;
 
