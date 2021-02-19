@@ -4,6 +4,7 @@ import { getAutocomplete } from './Autocomplete';
 import { Form, Col, Button, Container } from 'react-bootstrap';
 import Gallery from 'react-grid-gallery';
 import Pagination from "react-js-pagination";
+import AsyncSelect from 'react-select/async';
 
 
 export class Search extends React.Component {
@@ -20,7 +21,8 @@ export class Search extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
-    this.onClick= this.onClick.bind(this);
+    this.onClick = this.onClick.bind(this);
+    this.loadOptions = this.loadOptions.bind(this);
   }
 
   componentWillMount() {
@@ -41,8 +43,8 @@ export class Search extends React.Component {
     }).catch(err=>console.log(err.message));
   }
 
-  handleChange(e) {
-    const searchingText = e.target.value;    
+  handleChange(value) {
+    const searchingText = value.label;    
     if (searchingText != '') {
       getAutocomplete(searchingText).then((response) => {    
         this.setState({
@@ -66,27 +68,31 @@ export class Search extends React.Component {
     window.location.reload();
   }
 
-  onClick(e) {
+  onClick(value) {
     this.props.history.push({
       pathname: '/search',
-      search: e.target.innerText
+      search: value.label
     })
     window.location.reload();
-  }    
-
-  render(){
+  }  
+  
+  async loadOptions(searchingText, callback) {    
+    if (searchingText != '') {
+      getAutocomplete(searchingText).then((response) => {    
+        this.setState({
+          autocompleteArray: response.autocomplete,
+          showTooltip: true
+        });      
+      }).catch(err=>console.log(err.message));      
+    }
     const { autocompleteArray } = this.state;
 
-    let autocompleteList = (
-      <ul className='suggestions'>
-        {autocompleteArray.map((objectItem) => {
-          return (        
-            <li className='suggestions-li' onClick={this.onClick} key={objectItem.query}>{objectItem.query}</li>        
-          )
-        })} 
-      </ul>
-    );
+    callback(
+      autocompleteArray.map(objectItem => ({label: objectItem.query}))
+    )
+  }
 
+  render(){
     const { photos } = this.state;
 
     let photoList = photos.map((photo) => {
@@ -107,19 +113,21 @@ export class Search extends React.Component {
         <Form onSubmit={this.handleSubmit}>
           <Form.Group className='search'>
             <Form.Row className="align-items-center">        
-              <Col sm={9}>
-              <Form.Control
-                  type='text'
-                  onChange={this.handleChange}
-                  placeholder='Changed your mind? Enter the new term here'
+              <Col sm={9}>            
+                <AsyncSelect 
+                  cacheOptions
                   value={this.state.searchingText}
-                /> 
+                  placeholder='Changed your mind? Enter the new term here'
+                  loadOptions={this.loadOptions}
+                  defaultOptions
+                  onInputChange={this.handleChange}
+                  onChange={this.onClick}                  
+                />
               </Col>  
               <Col sm={3}>
                   <Button type="submit" className='btn-submit-search'>Submit</Button>
                 </Col>          
             </Form.Row>
-            {this.state.showTooltip && (<Form.Row className="autocomplete">{autocompleteList}</Form.Row>)}
           </Form.Group>            
         </Form>
         <div className="gallery-box">
