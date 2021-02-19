@@ -1,7 +1,7 @@
 import React from 'react';
 import { getPhoto } from './Photo';
 import { getAutocomplete } from './Autocomplete';
-import { Form, Col, Button, Container } from 'react-bootstrap';
+import { Form, Col, Container } from 'react-bootstrap';
 import Gallery from 'react-grid-gallery';
 import Pagination from "react-js-pagination";
 import AsyncSelect from 'react-select/async';
@@ -113,7 +113,7 @@ export class Search extends React.Component {
         <Form onSubmit={this.handleSubmit}>
           <Form.Group className='search'>
             <Form.Row className="align-items-center">        
-              <Col sm={9}>            
+              <Col sm={12}>            
                 <AsyncSelect 
                   cacheOptions
                   value={this.state.searchingText}
@@ -123,10 +123,7 @@ export class Search extends React.Component {
                   onInputChange={this.handleChange}
                   onChange={this.onClick}                  
                 />
-              </Col>  
-              <Col sm={3}>
-                  <Button type="submit" className='btn-submit-search'>Submit</Button>
-                </Col>          
+              </Col>              
             </Form.Row>
           </Form.Group>            
         </Form>

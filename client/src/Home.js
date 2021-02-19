@@ -1,6 +1,7 @@
 import React from 'react';
-import { Form, Col, Button, Container } from 'react-bootstrap';
+import { Form, Col, Container } from 'react-bootstrap';
 import { getAutocomplete } from './Autocomplete';
+import AsyncSelect from 'react-select/async';
 
 
 export class Home extends React.Component {
@@ -14,10 +15,11 @@ export class Home extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onClick= this.onClick.bind(this);
+    this.loadOptions = this.loadOptions.bind(this);
   }
 
-  handleChange(e) {
-    const searchingText = e.target.value;  
+  handleChange(value) {
+    const searchingText = value.label;  
     if (searchingText != '') {
       getAutocomplete(searchingText).then((response) => {     
         this.setState({
@@ -45,46 +47,49 @@ export class Home extends React.Component {
     })
   }
 
-  onClick(e) {
+  onClick(value) {
     this.props.history.push({
       pathname: '/search',
-      search: e.target.innerText
+      search: value.label
     })
     window.location.reload();
   }
 
-  render() {
+  async loadOptions(searchingText, callback) {    
+    if (searchingText != '') {
+      getAutocomplete(searchingText).then((response) => {    
+        this.setState({
+          autocompleteArray: response.autocomplete,
+          showTooltip: true
+        });      
+      }).catch(err=>console.log(err.message));      
+    }
     const { autocompleteArray } = this.state;
 
-    let autocompleteList = (
-        <ul className='suggestions'>
-          {autocompleteArray.map((objectItem) => {
-            return (        
-              <li className='suggestions-li' onClick={this.onClick} key={objectItem.query}>{objectItem.query}</li>        
-            )
-          })} 
-        </ul>     
-    );
+    callback(
+      autocompleteArray.map(objectItem => ({label: objectItem.query}))
+    )
+  }
 
+  render() {
     return(
       <Container className="bg">
         <Form onSubmit={this.handleSubmit}>
           <Form.Group className='home'>
             <Form.Label>Photo search engine: </Form.Label>
               <Form.Row className="align-items-center">        
-                <Col sm={9}>
-                <Form.Control
-                    type='text'
-                    onChange={this.handleChange}
-                    placeholder='Enter your search term here'
+                <Col sm={12}>
+                  <AsyncSelect 
+                    cacheOptions
                     value={this.state.searchingText}
-                  /> 
-                </Col>  
-                <Col sm={3}>
-                    <Button type="submit" className='btn-submit-home'>Submit</Button>
-                  </Col>          
+                    placeholder='Enter your search term here'
+                    loadOptions={this.loadOptions}
+                    defaultOptions
+                    onInputChange={this.handleChange}
+                    onChange={this.onClick}                  
+                  />
+                </Col>              
               </Form.Row>
-              {this.state.showTooltip && (<Form.Row className="autocomplete">{autocompleteList}</Form.Row>)}
           </Form.Group>
         </Form> 
       </Container>
